@@ -3,51 +3,92 @@ import {Switch, RadioButton} from "react-native-paper"
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useState} from "react"; 
   import {
-    LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart
+    LineChart
   } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
+import database from '@react-native-firebase/database';
 
-  const screenWidth = Dimensions.get("window").width;
+
+
+const screenWidth = Dimensions.get("window").width;
 function DataView(props) {
     const [isSwitchOn, setIsSwitchOn] = useState(false);
-    const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+    const onToggleSwitch = () => {setIsSwitchOn(!isSwitchOn); addWaterItem(!isSwitchOn); };
 
     const [isSwitchTwoOn, setIsSwitchTwoOn] = useState(false);
-    const onToggleSwitchTwo = () => setIsSwitchTwoOn(!isSwitchTwoOn);
+    const onToggleSwitchTwo = () => {setIsSwitchTwoOn(!isSwitchTwoOn); addOxygenItem(!isSwitchTwoOn);};
 
     const [checked, setChecked] = useState('temp');
-  
+
+    const [isPh, setIspH] = useState(0);
+    const [isMoist, setIsMoist] = useState(0);
+    const [isSolar, setIsSolar] = useState(0);
+    const [isTemp, setIsTemp] = useState(0);
+    const [isHumid, setIsHumid] = useState(0);
+
+
+    database()                          //Listener Event to Dynamic Data 
+    .ref('/DataView/Measurements')
+    .on('value', snapshot => {
+      const mVal = snapshot.val();
+      setIspH(Object.values(mVal.pH)[0]);
+      setIsMoist(Object.values(mVal.Moisture)[0]);
+      setIsSolar(Object.values(mVal.Solar)[0]);
+      setIsTemp(Object.values(mVal.Temperature)[0]);
+      setIsHumid(Object.values(mVal.Humidity)[0]);
+    });
+
+    const addWaterItem = item => {
+        database()
+        .ref('/DataView/Controls')
+        .update({
+          'Water': item,
+        });
+    };
+    const addOxygenItem = item => {
+        database()
+        .ref('/DataView/Controls')
+        .update({
+          'Oxygen': item,
+        });
+    };
+    
+    const readItems = () => {
+        console.log("Here");
+        database()
+        .ref('/DataView/Measurements/Humidity')
+        .once('value')
+        .then(snapshot => {
+          console.log('User data: ', snapshot.val());
+        });
+    };
+
     return ( 
         <View style={{flex: 1, flexDirection: "column", width: '100%'}}>
             <View style={{flex: 7,flexDirection: 'row'}}> 
                     <View style={{flex: 1,padding: 15}}>
-                            <SoilInfoCard cardType="eyedropper" cardValue="6.8" mVal="pH" />  
+                            <SoilInfoCard cardType="eyedropper" cardValue={isPh} mVal="pH" />  
                     </View >
                     <View style={{flex: 1,padding: 15}}>
-                            <SoilInfoCard cardType="water" cardValue="400" mVal="bH"/>
+                            <SoilInfoCard cardType="water" cardValue={isMoist} mVal="bH"/>
                     </View>  
                     <View style={{flex: 1,padding: 15}}>
-                            <SoilInfoCard cardType="sun-wireless" cardValue="250" mVal="mW"/>
+                            <SoilInfoCard cardType="sun-wireless" cardValue={isSolar} mVal="mW"/>
                     </View>  
             </View>
             <View style={{flex: 5, flexDirection: 'row'}}>
                     <View style={{flex: 1,padding: 15,paddingTop: 5}}>
-                            <EnvInfoCard cardType="thermometer" cardValue="25" mVal="temperature-celsius" infVal="Medium"/>
+                            <EnvInfoCard cardType="thermometer" cardValue={isTemp} mVal="temperature-celsius" infVal="Medium"/>
                     </View>
                     <View style={{flex: 1,padding: 15,paddingTop: 5}}>
-                            <EnvInfoCard cardType="water-opacity" cardValue="76" mVal="percent" infVal="High"/>
+                            <EnvInfoCard cardType="water-opacity" cardValue={isHumid} mVal="percent" infVal="High"/>
                     </View>
             </View>
             <View style={{flex: 3, alignItems: "center",paddingTop: 10}}>
                 <View style={{flex: 1,flexDirection: 'row', padding: 5, backgroundColor: 'lightgreen',width: '92%',borderRadius: 20, shadowColor: '#000000',  
         elevation: 6}}>
                 <View style={{flex: 1,justifyContent: "center", alignItems: "center"}}>
-                <Switch value={isSwitchOn} onValueChange={onToggleSwitch} color="green"   />
+                <Switch value={isSwitchOn} onValueChange={onToggleSwitch} color="green"    />
                 <Text style={{fontSize: 18,fontWeight:'500',color:"white"}}>Water Release</Text>
                     </View>
                 <View style={{flex: 1,justifyContent: "center", alignItems: "center"}}>
@@ -131,7 +172,7 @@ function DataView(props) {
                 color="lightgreen"
                 value="pH"
                 status={ checked === 'pH' ? 'checked' : 'unchecked' }
-                onPress={() => setChecked('pH')}
+                onPress={() => {setChecked('pH');readItems()}}
                 />
                 <Icon name="eyedropper"size={45} color="lightgreen" />
                 </View>
@@ -202,3 +243,10 @@ function EnvInfoCard(props) {
             </View>
     );
 };
+
+
+// BarChart,
+// PieChart,
+// ProgressChart,
+// ContributionGraph,
+// StackedBarChart

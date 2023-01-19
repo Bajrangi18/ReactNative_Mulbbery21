@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "682096029448",
+    "project_id": "freetrial-2d957",
+    "storage_bucket": "freetrial-2d957.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682096029448:android:95b0a1d116f254496a46bd",
+        "android_client_info": {
+          "package_name": "com.freetrial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682096029448-q4hgmk1iere7eopad4uu8a7rb4igui63.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.freetrial",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "682096029448-ubsenaa7nfs3raq4q5pcefv979s0r0pi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDemQrAlbQm-eG2i-N_CBWZabXAFjF5QKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682096029448-ubsenaa7nfs3raq4q5pcefv979s0r0pi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

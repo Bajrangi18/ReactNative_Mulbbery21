@@ -12,6 +12,7 @@ import com.facebook.soloader.SoLoader;
 import com.freetrial.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import com.brentvatne.react.ReactVideoPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -26,11 +27,18 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
+          packages.add(new ReactVideoPackage());
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           return packages;
         }
-
+        // @Override
+        // protected List<ReactPackage> getPackages() {
+        //     return Arrays.asList(
+        //             new MainReactPackage(),
+        //             new ReactVideoPackage()
+        //     );
+        // }
         @Override
         protected String getJSMainModuleName() {
           return "index";
